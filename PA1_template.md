@@ -19,13 +19,16 @@ df <- read.csv(handle, colClasses=classes)
 ## What is mean total number of steps taken per day?
 
 ```r
+#calculate mean total number of steps per day
 stepsPerDay <- sapply(split(df$steps,df$date), sum, na.rm=TRUE)
+#plot
 hist(stepsPerDay)
 ```
 
 ![](./PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 ```r
+#calculate mean
 mean(stepsPerDay)
 ```
 
@@ -34,6 +37,7 @@ mean(stepsPerDay)
 ```
 
 ```r
+#calculate median
 median(stepsPerDay)
 ```
 
@@ -45,13 +49,16 @@ median(stepsPerDay)
 ## What is the average daily activity pattern?
 
 ```r
+#calculate and plot mean steps by interval across all days
 stepsByInterval <- sapply(split(df$steps,df$interval), mean, na.rm=TRUE)
+
 plot(stepsByInterval, type='l', xlab='Interval', ylab='Number of steps')
 ```
 
 ![](./PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 ```r
+#find interval with greatest mean steps
 names(which.max(stepsByInterval))
 ```
 
@@ -62,6 +69,7 @@ names(which.max(stepsByInterval))
 
 
 ```r
+#count NA values
 sum(is.na(df$steps))
 ```
 
@@ -70,6 +78,8 @@ sum(is.na(df$steps))
 ```
 
 ```r
+#create a filler function which fills missing values with the average
+#value for that interval across all days, as calculated in the previous step
 filler <- function(x){
         if(is.na(x[1])){
                 y <- str_trim(as.character(x[3]))

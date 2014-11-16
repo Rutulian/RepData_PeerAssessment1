@@ -40,13 +40,12 @@ median(stepsPerDay)
 ## What is the average daily activity pattern?
 ```{r}
 #calculate and plot mean steps by interval across all days
-stepsByInterval <- aggregate(df$steps,
-                     by=list(Interval=df$interval)
-                     ,mean,na.rm=TRUE)
-plot(stepsByInterval, type='l', ylab='Number of steps')
+stepsByInterval <- sapply(split(df$steps,df$interval), mean, na.rm=TRUE)
+
+plot(stepsByInterval, type='l', xlab='Interval', ylab='Number of steps')
 
 #find interval with greatest mean steps
-stepsByInterval$Interval[which.max(stepsByInterval$x)]
+names(which.max(stepsByInterval))
 ```
 ## Imputing missing values
 
@@ -54,7 +53,8 @@ stepsByInterval$Interval[which.max(stepsByInterval$x)]
 #count NA values
 sum(is.na(df$steps))
 
-#create a filler function which will
+#create a filler function which fills missing values with the average
+#value for that interval across all days, as calculated in the previous step
 filler <- function(x){
         if(is.na(x[1])){
                 y <- str_trim(as.character(x[3]))
